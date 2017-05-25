@@ -1,39 +1,27 @@
-﻿Build started 11/17/2016 11:36:14 AM.
-     1>Project "C:\Users\ronyang\Documents\Visual Studio 2013\Projects\Mgmtor_DAQ2\Mgmtor_DAQ2\Mgmtor_DAQ2.vcxproj" on node 2 (Build target(s)).
+﻿Build started 5/24/2017 3:33:25 PM.
+     1>Project "C:\Users\jingyis\Desktop\Mgmtor_DAQ2\Mgmtor_DAQ2\Mgmtor_DAQ2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Mgmtor_DAQ2Dlg.cpp
          Mgmtor_DAQ2Dlg.cpp
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(203): warning C4244: 'argument' : conversion from 'float64' to 'uInt64', possible loss of data
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(209): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(210): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(212): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(238): warning C4244: '=' : conversion from 'float64' to 'uInt32', possible loss of data
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(219): warning C4101: 'MoveStatus' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(218): warning C4101: 'Motor1Status' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(244): warning C4101: 'dwThreadId' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(344): warning C4244: 'argument' : conversion from 'float64' to 'uInt64', possible loss of data
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(356): warning C4244: '=' : conversion from 'float64' to 'uInt32', possible loss of data
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(381): warning C4101: 'MoveStatus' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(380): warning C4101: 'Motor1Status' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(362): warning C4101: 'dwThreadId' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(456): warning C4244: 'argument' : conversion from 'float64' to 'uInt64', possible loss of data
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(491): warning C4244: '=' : conversion from 'float64' to 'uInt32', possible loss of data
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(518): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(472): warning C4101: 'MoveStatus' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(470): warning C4101: 'LastPosition' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(471): warning C4101: 'Motor1Status' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(473): warning C4101: 'RealTime' : unreferenced local variable
-     1>c:\users\ronyang\documents\visual studio 2013\projects\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(555): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(225): warning C4244: 'argument' : conversion from 'float64' to 'uInt64', possible loss of data
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(237): warning C4244: '=' : conversion from 'float64' to 'uInt32', possible loss of data
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(252): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(253): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(255): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(262): warning C4101: 'MoveStatus' : unreferenced local variable
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(261): warning C4101: 'Motor1Status' : unreferenced local variable
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(243): warning C4101: 'dwThreadId' : unreferenced local variable
+     1>c:\users\jingyis\desktop\mgmtor_daq2\mgmtor_daq2\mgmtor_daq2dlg.cpp(337): warning C4018: '<' : signed/unsigned mismatch
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ronyang\Documents\Visual Studio 2013\Projects\Mgmtor_DAQ2\Debug\Mgmtor_DAQ2.exe" /INCREMENTAL /NOLOGO "C:\Program Files (x86)\National Instruments\Shared\ExternalCompilerSupport\C\Lib32\MSVC\NIDAQmx.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\ronyang\Documents\Visual Studio 2013\Projects\Mgmtor_DAQ2\Debug\Mgmtor_DAQ2.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ronyang\Documents\Visual Studio 2013\Projects\Mgmtor_DAQ2\Debug\Mgmtor_DAQ2.lib" /MACHINE:X86 Debug\Mgmtor_DAQ2.res
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\jingyis\Desktop\Mgmtor_DAQ2\Debug\Mgmtor_DAQ2.exe" /INCREMENTAL /NOLOGO "C:\Program Files (x86)\National Instruments\Shared\ExternalCompilerSupport\C\Lib32\MSVC\NIDAQmx.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\jingyis\Desktop\Mgmtor_DAQ2\Debug\Mgmtor_DAQ2.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\jingyis\Desktop\Mgmtor_DAQ2\Debug\Mgmtor_DAQ2.lib" /MACHINE:X86 Debug\Mgmtor_DAQ2.res
          Debug\mgmotorctrl1.obj
          Debug\Mgmtor_DAQ2.obj
          Debug\Mgmtor_DAQ2Dlg.obj
          Debug\Boolean28th.obj
          Debug\stdafx.obj
-         Mgmtor_DAQ2.vcxproj -> C:\Users\ronyang\Documents\Visual Studio 2013\Projects\Mgmtor_DAQ2\Debug\Mgmtor_DAQ2.exe
-     1>Done Building Project "C:\Users\ronyang\Documents\Visual Studio 2013\Projects\Mgmtor_DAQ2\Mgmtor_DAQ2\Mgmtor_DAQ2.vcxproj" (Build target(s)).
+         Mgmtor_DAQ2.vcxproj -> C:\Users\jingyis\Desktop\Mgmtor_DAQ2\Debug\Mgmtor_DAQ2.exe
+     1>Done Building Project "C:\Users\jingyis\Desktop\Mgmtor_DAQ2\Mgmtor_DAQ2\Mgmtor_DAQ2.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.69
+Time Elapsed 00:00:04.12

@@ -1,4 +1,3 @@
-
 // Mgmtor_DAQ2Dlg.cpp : implementation file
 //
 
@@ -24,15 +23,15 @@
 using namespace std;
 // Struct to pass args to DAQ thread
 typedef struct SParam{
-	TaskHandle	tHandle;
-	int32		NumSamPerChan;
-	float64		TimeOut;
-	bool32		FillMode;
-	float64		*ReadArray;
-	uInt32		ArraySize;
-	int32		*SampPerChanRead;
-	bool32		*reserved;
-}uParam,*sParam;
+	TaskHandle  tHandle;
+	int32       NumSamPerChan;
+	float64     TimeOut;
+	bool32      FillMode;
+	uInt16      *ReadArray;
+	uInt32      ArraySize;
+	int32       *SampPerChanRead;
+	bool32      *reserved;
+}uParam, *sParam;
 // CAboutDlg dialog used for App About
 
 class CAboutDlg : public CDialogEx
@@ -40,13 +39,13 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// Dialog Data
+	// Dialog Data
 	enum { IDD = IDD_ABOUTBOX };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
-// Implementation
+	// Implementation
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -120,8 +119,8 @@ BOOL CMgmtor_DAQ2Dlg::OnInitDialog()
 
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	SetIcon(m_hIcon, TRUE);         // Set big icon
+	SetIcon(m_hIcon, FALSE);        // Set small icon
 
 	// TODO: Add extra initialization here
 
@@ -183,125 +182,7 @@ DWORD WINAPI DAQThread(LPVOID lpParameter);
 
 void CMgmtor_DAQ2Dlg::OnBnClickedButton1()
 {
-	// TODO: Add your control notification handler code here
-	//DAQ Initiation
-	int32       error = 0;
-	TaskHandle  taskHandle = 0;
-	int32       read;
-	float64     data[50000];
-	float64		timeout = 1250;
-	char        errBuff[2048] = { '\0' };
-	float64		sampRate = 20;
-	float64		sampPerChan = 25000;
-	// Write to file
-	// File Operation 
-	ofstream FILEMotor("U:\\eng_research_biomicroscopy\\Ron\\Results\\1008\\PoTi_ATS_1.txt");
 
-	// DAQmx Configure Code
-	DAQmxErrChk1(DAQmxCreateTask("", &taskHandle));
-	DAQmxErrChk1(DAQmxCreateAIVoltageChan(taskHandle, "Dev1/ai0:1", "", DAQmx_Val_Cfg_Default, -1.0, 1.0, DAQmx_Val_Volts, NULL));
-	DAQmxErrChk1(DAQmxCfgSampClkTiming(taskHandle, "OnBoardClock", sampRate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, sampPerChan));
-	// DAQmx Start Code
-	DAQmxErrChk1(DAQmxStartTask(taskHandle));
-
-
-	// Scanning Configuration
-	float		xResolution = 0.35;
-	float		yResolution = 0.35;
-	float		xStart = 0;
-	float		xEnd = 14.35;
-	float		ySteps = 40;
-	int			ScanCount;
-	float		Motor1Position = 0;
-	float		Motor2Position = 0;
-	float		LastPosition ;
-	long		Motor1Status;
-	bool		MoveStatus;	// 1 = moving, 0 = not moving
-	clock_t		RealTime;
-	clock_t		AcqStartTime;
-	clock_t		pauseTime = 1000;
-	
-	// Home the motors
-	Motor1.MoveHome(0, 1);
-	Motor2.MoveHome(0, 1);
-
-	// Every for loop contains four steps
-	Motor1.SetAbsMovePos(0, xStart);	// Move to the start position
-	Motor1.MoveAbsolute(0, 1);
-	// DAQ Thread
-	SParam sparam;
-	SParam *ParamPointer;
-	ParamPointer = &sparam;
-	sparam.tHandle = taskHandle;
-	sparam.TimeOut = timeout;
-	sparam.FillMode = DAQmx_Val_GroupByChannel;
-	sparam.ArraySize = sampPerChan * 2;
-	sparam.NumSamPerChan = -1;
-	sparam.ReadArray = data;
-	sparam.reserved = NULL;
-	sparam.SampPerChanRead = &read;
-	
-	LPDWORD dwThreadId;
-	HANDLE hThrd = NULL;
-
-	AcqStartTime = clock();
-	hThrd = (HANDLE)CreateThread(NULL, 0, DAQThread, ParamPointer, 0, NULL);
-	CloseHandle(hThrd);
-
-	// Perform Scan
-	Motor1.SetVelParams(0, 0, 1.5, 1);
-	for (ScanCount = 1; ScanCount < ySteps / 2 + 1; ScanCount++){
-		// Stage one
-		LastPosition = -1;
-		Motor2.GetPosition(0, &Motor2Position);
-		//Motor1.LLGetStatusBits(0, &Motor1Status);
-		//MoveStatus = Boolean28th(Motor1Status);
-		Motor1.SetAbsMovePos(0, xEnd);
-		Motor1.MoveAbsolute(0, 0);
-		Sleep(32);		// If the program enters the while loop too fast, motion will not be detected due to slow accelaration of the motor.
-		while (Motor1Position - LastPosition){
-			LastPosition = Motor1Position;	// Use the position acquired last time to check the moving status
-			Motor1.GetPosition(0, &Motor1Position);
-			RealTime = clock() - AcqStartTime;
-
-			// Write directly to file
-			FILEMotor << Motor1Position << '\t' << Motor2Position << '\t' << RealTime << endl;
-		}
-		// Stage two
-		Motor2.SetRelMoveDist(0, yResolution); 
-		Motor2.MoveRelative(0, 1);
-		Sleep(pauseTime);
-		// Stage three
-		LastPosition = -1;
-		Motor2.GetPosition(0, &Motor2Position);
-		Motor1.SetAbsMovePos(0, xStart);
-		Motor1.MoveAbsolute(0, 0);
-		Sleep(32);
-		while (Motor1Position - LastPosition){
-			LastPosition = Motor1Position;	// Use the position acquired last time to check the moving status
-			Motor1.GetPosition(0, &Motor1Position);
-			RealTime = clock() - AcqStartTime;
-
-			// Write directly to file
-			FILEMotor << Motor1Position << '\t' << Motor2Position << '\t' << RealTime << endl;
-		}
-		// Stage four
-		Motor2.SetRelMoveDist(0, yResolution);
-		Motor2.MoveRelative(0, 1);
-		Sleep(pauseTime);
-	}
-
-	FILEMotor.close(); // Close the file stream
-Error1:
-	if (DAQmxFailed(error))
-		DAQmxGetExtendedErrorInfo(errBuff, 2048);
-	if (taskHandle != 0) {
-		/*********************************************/
-		// DAQmx Stop Code
-		/*********************************************/
-		DAQmxStopTask(taskHandle);
-		DAQmxClearTask(taskHandle);
-	}
 }
 
 
@@ -322,25 +203,25 @@ void CMgmtor_DAQ2Dlg::OnBnClickedButton2()
 	int32       error = 0;
 	TaskHandle  taskHandle = 0;
 	int32       read;
-	float64     data[100000];
-	float64		timeout = 500;
+	uInt16      data[336000];
+	float64     timeout = 2100;  // data acquisition time span in sec	
 	char        errBuff[2048] = { '\0' };
-	float64		sampRate = 50;
-	float64		sampPerChan = 25000;
-	clock_t		RealTime;
-	clock_t		AcqStartTime;
-	clock_t		pauseTime = 500;
+	float64     sampRate = 80;  // sampling rate in samples/sec
+	float64     sampPerChan = 168000;
+	clock_t     RealTime;
+	clock_t     AcqStartTime;
+	clock_t     pauseTime = 500;  // sleep time in mili sec
 	///////////////////////
 
-	
+
 	// Write to file
 	// File Operation 
 	//ofstream FILEMotor("U:\\eng_research_biomicroscopy\\Ron\\Results\\1017\\PoTi_PHA_6.txt");
-	ofstream FILEMotor("U:\\eng_research_biomicroscopy\\Ron\\Results\\20161115\\PoTi_PHA_6.txt");
+	ofstream FILEMotor("C:\\Users\\jingyis\\Documents\\us_obm_data\\05242017\\PoTi_PHA_6.txt");
 
 	// DAQmx Configure Code
 	DAQmxErrChk1(DAQmxCreateTask("", &taskHandle));
-	DAQmxErrChk1(DAQmxCreateAIVoltageChan(taskHandle, "Dev1/ai0:3", "", DAQmx_Val_Cfg_Default, -0, 1, DAQmx_Val_Volts, NULL));
+	DAQmxErrChk1(DAQmxCreateAIVoltageChan(taskHandle, "Dev1/ai0:1", "", DAQmx_Val_Cfg_Default, -0, 1, DAQmx_Val_Volts, NULL));
 	DAQmxErrChk1(DAQmxCfgSampClkTiming(taskHandle, "OnBoardClock", sampRate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, sampPerChan));
 	// DAQmx Start Code
 
@@ -353,7 +234,7 @@ void CMgmtor_DAQ2Dlg::OnBnClickedButton2()
 	sparam.tHandle = taskHandle;
 	sparam.TimeOut = timeout;
 	sparam.FillMode = DAQmx_Val_GroupByChannel;
-	sparam.ArraySize = sampPerChan * 4;
+	sparam.ArraySize = sampPerChan * 2;
 	sparam.NumSamPerChan = -1;
 	sparam.ReadArray = data;
 	sparam.reserved = NULL;
@@ -366,26 +247,26 @@ void CMgmtor_DAQ2Dlg::OnBnClickedButton2()
 	hThrd = (HANDLE)CreateThread(NULL, 0, DAQThread, ParamPointer, 0, NULL);
 
 	CloseHandle(hThrd);
-	
+
 	// Scanning Configuration
-	float		xResolution = 0.25;
-	float		yResolution = 0.25;
-	float		xStart = 0;
-	float		xEnd = 15.25;
-	float		ySteps = 16;
-	int			ScanCount;
-	float		Motor1Position = 0;
-	float		Motor2Position = 0;
-	float		LastPosition;
-	long		Motor1Status;
-	bool		MoveStatus;	// 1 = moving, 0 = not moving
+	float       xResolution = 0.15;
+	float       yResolution = 0.15;
+	float       xStart = 0;
+	float       xEnd = 15.15;
+	float       ySteps = 70;
+	int         ScanCount;
+	float       Motor1Position = 0;
+	float       Motor2Position = 0;
+	float       LastPosition;
+	long        Motor1Status;
+	bool        MoveStatus; // 1 = moving, 0 = not moving
 
 	// Home the motors
 	Motor1.MoveHome(0, 1);
 	Motor2.MoveHome(0, 1);
 
 	// Every for loop contains four steps
-	Motor1.SetAbsMovePos(0, xStart);	// Move to the start position
+	Motor1.SetAbsMovePos(0, xStart);    // Move to the start position
 	Motor1.MoveAbsolute(0, 1);
 
 
@@ -399,12 +280,12 @@ void CMgmtor_DAQ2Dlg::OnBnClickedButton2()
 		//MoveStatus = Boolean28th(Motor1Status);
 		Motor1.SetAbsMovePos(0, xEnd);
 		Motor1.MoveAbsolute(0, 0);
-		Sleep(32);		// If the program enters the while loop too fast, motion will not be detected due to slow accelaration of the motor.
+		Sleep(32);      // If the program enters the while loop too fast, motion will not be detected due to slow accelaration of the motor.
 
 		while (Motor1Position - LastPosition){
-			LastPosition = Motor1Position;	// Use the position acquired last time to check the moving status
+			LastPosition = Motor1Position;  // Use the position acquired last time to check the moving status
 			Motor1.GetPosition(0, &Motor1Position);
-			RealTime = clock() ;
+			RealTime = clock();
 
 			// Write directly to file
 			FILEMotor << Motor1Position << '\t' << Motor2Position << '\t' << RealTime << endl;
@@ -434,106 +315,7 @@ Error1:
 
 void CMgmtor_DAQ2Dlg::OnBnClickedButton3()
 {
-	// TODO: Add your control notification handler code here
-	//DAQ Initiation
-	int32       error = 0;
-	TaskHandle  taskHandle = 0;
-	int32       read;
-	float64		data[40][2400];
-	float64		timeout = 1000;
-	char        errBuff[2048] = { '\0' };
-	float64		sampRate = 50;
-	float64		sampPerChan = 2400;
-	int i;
-	int dataSize;
-	// Write to file
-	// File Operation 
-	ofstream FILEDAQ("U:\\eng_research_biomicroscopy\\Ron\\Results\\20160725\\c1.txt");
-	
-	// DAQmx Configure Code
-	DAQmxErrChk1(DAQmxCreateTask("", &taskHandle));
-	DAQmxErrChk1(DAQmxCreateAIVoltageChan(taskHandle, "Dev1/ai0", "", DAQmx_Val_Cfg_Default, -1, 1, DAQmx_Val_Volts, NULL));
-	DAQmxErrChk1(DAQmxCfgSampClkTiming(taskHandle, "OnBoardClock", sampRate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, sampPerChan));
-	// DAQmx Start Code
-	//DAQmxErrChk1(DAQmxStartTask(taskHandle));
 
-
-	// Scanning Configuration
-	float		xResolution = 0.25;
-	float		yResolution = 0.25;
-	float		xStart = 0;
-	float		xEnd = 12;
-	float		ySteps = 40;
-	int			ScanCount;
-	float		Motor1Position = 0;
-	float		Motor2Position = 0;
-	float		LastPosition;
-	long		Motor1Status;
-	bool		MoveStatus;	// 1 = moving, 0 = not moving
-	clock_t		RealTime;
-	clock_t		AcqStartTime;
-	clock_t		pauseTime = 500;
-
-	// Home the motors
-	Motor1.MoveHome(0, 1);
-	Motor2.MoveHome(0, 1);
-
-	// Every for loop contains four steps
-	Motor1.SetAbsMovePos(0, xStart);	// Move to the start position
-	Motor1.MoveAbsolute(0, 1);
-	// DAQ Thread
-	SParam sparam;
-	SParam *ParamPointer;
-	ParamPointer = &sparam;
-	sparam.tHandle = taskHandle;
-	sparam.TimeOut = timeout;
-	sparam.FillMode = DAQmx_Val_GroupByChannel;
-	sparam.ArraySize = sampPerChan * 2;
-	sparam.NumSamPerChan = -1;
-	sparam.reserved = NULL;
-	sparam.SampPerChanRead = &read;
-
-	AcqStartTime = clock();
-	dataSize = 2 * (int)sampPerChan;
-	// Perform Scan
-	Motor1.SetVelParams(0, 0, 1.5, 1);
-
-	for (ScanCount = 1; ScanCount < ySteps + 1; ScanCount++){
-		DAQmxStartTask(taskHandle);
-		// Stage one
-		Motor1.SetAbsMovePos(0, xEnd);
-		DAQmxReadAnalogF64(sparam.tHandle, sparam.NumSamPerChan, sparam.TimeOut, sparam.FillMode, data[ScanCount-1], sparam.ArraySize, sparam.SampPerChanRead, sparam.reserved);
-		Motor1.MoveAbsolute(0, 1);
-
-		// Stage two
-		Motor2.SetRelMoveDist(0, yResolution);
-		Motor2.MoveRelative(0, 1);
-		Motor1.SetAbsMovePos(0, xStart);
-		Motor1.MoveAbsolute(0, 1);
-		Sleep(pauseTime);
-		DAQmxStopTask(taskHandle);
-	}
-	for (ScanCount = 1; ScanCount < ySteps + 1; ScanCount++){
-		// Write directly to file
-		for (i = 0; i < sparam.ArraySize; i++){
-			FILEDAQ << data[ScanCount-1][i] << '\t';
-
-		}
-		FILEDAQ << endl;
-	}
-	FILEDAQ.close(); // Close the file stream
-
-
-Error1:
-	if (DAQmxFailed(error))
-		DAQmxGetExtendedErrorInfo(errBuff, 2048);
-	if (taskHandle != 0) {
-		/*********************************************/
-		// DAQmx Stop Code
-		/*********************************************/
-		DAQmxStopTask(taskHandle);
-		DAQmxClearTask(taskHandle);
-	}
 }
 
 DWORD WINAPI DAQThread(LPVOID lpParameter){
@@ -543,24 +325,22 @@ DWORD WINAPI DAQThread(LPVOID lpParameter){
 	clock_t startTime;
 	clock_t endTime;
 	startTime = clock();
-	DAQmxReadAnalogF64(sparam->tHandle, sparam->NumSamPerChan, sparam->TimeOut, sparam->FillMode, sparam->ReadArray, sparam->ArraySize, sparam->SampPerChanRead, sparam->reserved);
+	DAQmxReadBinaryU16(sparam->tHandle, sparam->NumSamPerChan, sparam->TimeOut, sparam->FillMode, sparam->ReadArray, sparam->ArraySize, sparam->SampPerChanRead, sparam->reserved);
 	endTime = clock();
 	// File Operation 
 	//ofstream FILEDAQP("U:\\eng_research_biomicroscopy\\Ron\\Results\\1017\\DAQP_PHA_6.txt");
 	//ofstream FILEDAQV("U:\\eng_research_biomicroscopy\\Ron\\Results\\1017\\DAQV_PHA_6.txt");
-	ofstream FILEDAQP("U:\\eng_research_biomicroscopy\\Ron\\Results\\20161115\\c6.txt");
-	ofstream FILEDAQV("U:\\eng_research_biomicroscopy\\Ron\\Results\\20161115\\DAQV6.txt");
+	//ofstream FILEDAQP("U:\\eng_research_biomicroscopy\\Ron\\Results\\20161115\\c6.txt");
+	ofstream FILEDAQV("C:\\Users\\jingyis\\Documents\\us_obm_data\\05242017\\DAQV66.txt");
 
 	int i;
-	for (i = 0; i < sparam->ArraySize/2; i++){
+	for (i = 0; i < sparam->ArraySize; i++){
 		FILEDAQV << sparam->ReadArray[i] << endl;
-		FILEDAQP << sparam->ReadArray[i + sparam->ArraySize / 2] << endl;
+		//FILEDAQP << sparam->ReadArray[i + sparam->ArraySize / 2] << endl;
 
 	}
 	FILEDAQV << startTime << endl << endTime << endl;
 	FILEDAQV.close();
-	FILEDAQP.close(); 
+	//FILEDAQP.close(); 
 	return 0;
 }
-
-
